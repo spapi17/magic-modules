@@ -2689,7 +2689,7 @@ resource "google_composer_environment" "test" {
       image_version = "composer-1-airflow-2"
     }
   }
-  depends_on = [google_project_iam_member.composer-worker]
+  depends_on = [google_project_iam_member.composer-worker, time_sleep.wait2]
 }
 
 resource "google_compute_network" "test" {
@@ -2718,6 +2718,11 @@ resource "google_project_iam_member" "composer-worker" {
 
 resource "time_sleep" "wait" {
   depends_on = [google_service_account.test]
+  create_duration = "120s"
+}
+
+resource "time_sleep" "wait2" {
+  depends_on = [google_project_iam_member.composer-worker]
   create_duration = "120s"
 }
 
